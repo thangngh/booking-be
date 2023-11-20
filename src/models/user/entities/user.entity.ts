@@ -6,7 +6,7 @@ import { DoctorSpecialized } from 'models/doctor_specialized/entities/doctor_spe
 import { Message } from 'models/message/entities/message.entity';
 import { BaseRepository } from 'models/models.repository';
 import { UserRole } from 'models/user-role/entities/user-role.entity';
-import { BeforeInsert, BeforeUpdate, Column, Entity, Index, ManyToOne, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
+import { BeforeInsert, BeforeUpdate, Column, Entity, Index, ManyToOne, OneToMany, OneToOne, PrimaryGeneratedColumn } from 'typeorm';
 
 @Entity()
 export class User extends BaseRepository {
@@ -63,7 +63,7 @@ export class User extends BaseRepository {
     @OneToMany(() => UserRole, userRole => userRole.user)
     userRole: UserRole[]
 
-    @OneToMany(() => DoctorRegister, doctorRegister => doctorRegister.user)
+    @OneToOne(() => DoctorRegister, doctorRegister => doctorRegister.user)
     doctorRegister: DoctorRegister[]
 
     @OneToMany(() => DoctorSpecialized, doctorSpecialized => doctorSpecialized.user)

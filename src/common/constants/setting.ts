@@ -1,5 +1,5 @@
 import * as argon2 from "argon2";
-
+import * as crypto from 'crypto';
 export enum TokenType {
     ACCESS_TOKEN = 'ACCESS_TOKEN',
     REFRESH_TOKEN = 'REFRESH_TOKEN',
@@ -54,4 +54,8 @@ export async function hashValue(value: string) {
 export async function validateHash(hashValue: string, value: string): Promise<boolean> {
     const isMatch = await argon2.verify(hashValue, value);
     return isMatch;
+}
+
+export function generateString() {
+    return crypto.randomBytes(12).toString('hex');
 }

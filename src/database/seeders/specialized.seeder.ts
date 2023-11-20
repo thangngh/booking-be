@@ -66,7 +66,13 @@ export class SpecializedSeeder implements Seeder {
         ]
 
         for await (const dt of data) {
-            await specializedRepository.insert([{ name: dt }])
+            const checkDuplicateSpecialized = await specializedRepository.findOneBy({
+                name: dt
+            })
+
+            if (!checkDuplicateSpecialized) {
+                await specializedRepository.insert([{ name: dt }])
+            }
         }
     }
 }

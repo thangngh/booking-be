@@ -15,6 +15,7 @@ import { DoctorSpecializedModule } from './models/doctor_specialized/doctor_spec
 import { EmailModule } from 'config/email/email.module';
 import { ConversationModule } from './models/conversation/conversation.module';
 import { MessageModule } from './models/message/message.module';
+import { PatientRegisterModule } from './models/patient_register/patient_register.module';
 @Module({
   imports: [
     ConfigModule.forRoot({
@@ -33,6 +34,7 @@ import { MessageModule } from './models/message/message.module';
     DoctorSpecializedModule,
     ConversationModule,
     MessageModule,
+    PatientRegisterModule,
   ],
   controllers: [AppController],
   providers: [AppService],

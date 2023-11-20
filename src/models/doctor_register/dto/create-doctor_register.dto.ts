@@ -17,10 +17,10 @@ export class CreateDoctorRegisterDto {
     email: string;
 
     @ApiProperty()
-    @IsNotEmpty()
+    // @IsNotEmpty()
     timeBegin: Date;
 
     @ApiProperty()
-    @IsNotEmpty()
+    // @IsNotEmpty()
     timeEnd: Date
 }

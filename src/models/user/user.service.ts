@@ -8,6 +8,8 @@ import { IBody, hashValue } from 'common/constants/setting';
 import { IJwtPayload } from 'authentication/auth/interface/auth.interface';
 import { UserRepository } from './user.repository';
 import { IUpdateRT } from './user.interface';
+import { PaginationDTO } from 'common/pagination/dto/paginationQuery-dto';
+import { Pagination } from 'common/pagination';
 
 @Injectable()
 export class UserService {
@@ -69,5 +71,24 @@ export class UserService {
     return await this.userRepository.saveRefreshToken(id.toString(), hash)
   }
 
+  async getAllDoctor(query: PaginationDTO): Promise<Pagination<User>> {
 
+    const DEFAULT_LIMIT = 10;
+    const DEFAULT_PAGE = 1;
+
+    const { limit = DEFAULT_LIMIT, page = DEFAULT_PAGE } = query;
+
+    const { results, total } = await this.userRepository.findDoctor(limit, page);
+
+    return new Pagination<User>({
+      results: results,
+      total,
+    });
+  }
+
+  async getUserRole(user: User) {
+    const { id } = user;
+
+    return await this.userRepository.getUserRole(id)
+  }
 }

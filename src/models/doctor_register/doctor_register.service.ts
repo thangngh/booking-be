@@ -11,32 +11,43 @@ import { JwtService } from '@nestjs/jwt';
 export class DoctorRegisterService {
     constructor(
         @InjectRepository(DoctorRegister) private readonly doctorRepository: Repository<DoctorRegister>,
-        private readonly jwtService: JwtService
     ) { }
 
     async registerDoctor(user: User, body: CreateDoctorRegisterDto) {
         const { id } = user;
-
         const transition = await this.doctorRepository.manager.connection.createQueryRunner();
 
         await transition.connect();
         await transition.startTransaction();
 
         try {
+            const created = await transition.manager.create(DoctorRegister, {
+                phone: body.phone, certification: body.certification, email: body.email, timeBegin: body.timeBegin, timeEnd: body.timeEnd, userId: id
+            })
 
+            const save = await transition.manager.save(created)
+            console.log("created", save)
+            await transition.commitTransaction()
         } catch (error) {
             await transition.rollbackTransaction();
+
+
             throw new HttpException(error.message, HttpStatus.BAD_REQUEST);
         } finally {
             await transition.release();
         }
 
-        const query = await this.doctorRepository.createQueryBuilder("doctor")
-            .insert().into(DoctorRegister)
-            .values({
-                ...body,
-                userId: id
-            }).execute()
+    }
+
+    async editDoctor(doctorId: number, user: User, body: UpdateDoctorRegisterDto) {
+
+        const updateDoctor = await this.doctorRepository.createQueryBuilder()
+            .update(DoctorRegister)
+            .set({
+                ...body
+            })
+            .where("id = :id", { id: doctorId })
+            .execute()
 
     }
 

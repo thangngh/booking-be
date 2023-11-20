@@ -16,15 +16,13 @@ export class Conversation extends BaseEntity {
     @Column()
     name: string;
 
-    // @Column({ name: 'message_id' })
-    // messageId: number;
-
-    @Column({ name: ' user_id' })
-    userId: string;
+    @Column({ name: 'user_id' })
+    userId: number;
 
     @OneToMany(() => Message, (message) => message.conversation)
     messages: Message[];
 
     @ManyToOne(() => User, (user) => user.conversations)
+    @JoinColumn({ name: 'user_id' })
     user: User;
 }

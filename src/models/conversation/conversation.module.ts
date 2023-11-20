@@ -13,6 +13,7 @@ import { Message } from 'models/message/entities/message.entity';
     ])
   ],
   controllers: [ConversationController],
-  providers: [ConversationService]
+  providers: [ConversationService],
+  exports: [ConversationService]
 })
 export class ConversationModule { }

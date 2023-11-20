@@ -11,6 +11,9 @@ export class Message extends BaseEntity {
     @Column()
     body: string;
 
+    // @Column({ nullable: true })
+    // media: string;
+
     @Column({
         default: () => "CURRENT_TIMESTAMP"
     })
@@ -24,6 +27,6 @@ export class Message extends BaseEntity {
     conversation: Conversation;
 
     @ManyToOne(() => User, (user) => user.messages)
-    sender: User; r
+    sender: User;
 
 }

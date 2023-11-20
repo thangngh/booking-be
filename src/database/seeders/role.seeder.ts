@@ -10,11 +10,11 @@ export class RoleSeeder implements Seeder {
         const data = ['USER', 'DOCTOR', 'PATIENT'];
 
         for await (const dt of data) {
-            const checkDuplRoleName = await roleRepository.findOneBy({
+            const checkDuplicateRoleName = await roleRepository.findOneBy({
                 roleName: dt
             })
 
-            if (!checkDuplRoleName) {
+            if (!checkDuplicateRoleName) {
                 await roleRepository.insert([{ roleName: dt }])
             }
         }

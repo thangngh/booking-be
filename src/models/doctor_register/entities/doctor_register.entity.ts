@@ -1,6 +1,6 @@
 import { BaseRepository } from "models/models.repository";
 import { User } from "models/user/entities/user.entity";
-import { Column, Entity, JoinColumn, ManyToOne, OneToMany, PrimaryGeneratedColumn } from "typeorm";
+import { Column, Entity, JoinColumn, ManyToOne, OneToMany, OneToOne, PrimaryGeneratedColumn } from "typeorm";
 
 @Entity()
 export class DoctorRegister extends BaseRepository {
@@ -26,7 +26,7 @@ export class DoctorRegister extends BaseRepository {
     @Column({ name: 'user_id' })
     userId: number
 
-    @ManyToOne(() => User, user => user.doctorRegister)
+    @OneToOne(() => User, user => user.doctorRegister)
     @JoinColumn({ name: 'user_id' })
     user: User
 

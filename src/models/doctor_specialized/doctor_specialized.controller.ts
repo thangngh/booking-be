@@ -7,5 +7,9 @@ import { UpdateDoctorSpecializedDto } from './dto/update-doctor_specialized.dto'
 export class DoctorSpecializedController {
   constructor(private readonly doctorSpecializedService: DoctorSpecializedService) { }
 
+  @Post("/create")
+  create(@Body() body: CreateDoctorSpecializedDto[]) {
+    this.doctorSpecializedService.create(body)
+  }
 
 }

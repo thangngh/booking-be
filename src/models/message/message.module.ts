@@ -5,6 +5,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { User } from 'models/user/entities/user.entity';
 import { Conversation } from 'models/conversation/entities/conversation.entity';
 import { Message } from './entities/message.entity';
+import { ConversationModule } from 'models/conversation/conversation.module';
 
 @Module({
   imports: [
@@ -12,9 +13,11 @@ import { Message } from './entities/message.entity';
       User,
       Conversation,
       Message
-    ])
+    ]),
+    ConversationModule
   ],
   controllers: [MessageController],
-  providers: [MessageService]
+  providers: [MessageService],
+  exports: [MessageService]
 })
 export class MessageModule { }
