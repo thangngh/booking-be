@@ -3,6 +3,7 @@ import { EGender, EProviderType, IAddress } from 'common/constants/setting';
 import { Conversation } from 'models/conversation/entities/conversation.entity';
 import { DoctorRegister } from 'models/doctor_register/entities/doctor_register.entity';
 import { DoctorSpecialized } from 'models/doctor_specialized/entities/doctor_specialized.entity';
+import { Feedback } from 'models/feedback/entities/feedback.entity';
 import { Message } from 'models/message/entities/message.entity';
 import { BaseRepository } from 'models/models.repository';
 import { UserRole } from 'models/user-role/entities/user-role.entity';
@@ -69,5 +70,10 @@ export class User extends BaseRepository {
     @OneToMany(() => DoctorSpecialized, doctorSpecialized => doctorSpecialized.user)
     doctorSpecialized: DoctorSpecialized[]
 
+    @OneToMany(() => Feedback, feedbackDoctor => feedbackDoctor.doctor)
+    feedbackDoctor: Feedback[]
+
+    @OneToMany(() => Feedback, feedbackPatient => feedbackPatient.patient)
+    feedbackPatient: Feedback[]
 
 }

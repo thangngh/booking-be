@@ -1,8 +1,14 @@
-import { BaseEntity, Entity, PrimaryGeneratedColumn } from "typeorm";
+import { BaseEntity, Column, Entity, PrimaryGeneratedColumn } from "typeorm";
 
-@Entity()
+// @Entity()
 export class PatientRegister extends BaseEntity {
 
     @PrimaryGeneratedColumn()
     id: number;
+
+    @Column()
+    symptom: string;
+
+    @Column({ nullable: true })
+    insurance: string
 }

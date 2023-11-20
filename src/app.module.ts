@@ -16,6 +16,9 @@ import { EmailModule } from 'config/email/email.module';
 import { ConversationModule } from './models/conversation/conversation.module';
 import { MessageModule } from './models/message/message.module';
 import { PatientRegisterModule } from './models/patient_register/patient_register.module';
+import { AppointmentModule } from './models/appointment/appointment.module';
+import { BookingHistoryModule } from './models/booking_history/booking_history.module';
+import { FeedbackModule } from './models/feedback/feedback.module';
 @Module({
   imports: [
     ConfigModule.forRoot({
@@ -35,6 +38,9 @@ import { PatientRegisterModule } from './models/patient_register/patient_registe
     ConversationModule,
     MessageModule,
     PatientRegisterModule,
+    AppointmentModule,
+    BookingHistoryModule,
+    FeedbackModule,
   ],
   controllers: [AppController],
   providers: [AppService],

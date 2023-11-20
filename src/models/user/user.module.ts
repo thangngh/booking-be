@@ -9,6 +9,7 @@ import { DoctorRegister } from 'models/doctor_register/entities/doctor_register.
 import { DoctorSpecialized } from 'models/doctor_specialized/entities/doctor_specialized.entity';
 import { Conversation } from 'models/conversation/entities/conversation.entity';
 import { Message } from 'models/message/entities/message.entity';
+import { Feedback } from 'models/feedback/entities/feedback.entity';
 
 @Module({
   imports: [
@@ -18,7 +19,8 @@ import { Message } from 'models/message/entities/message.entity';
       DoctorRegister,
       DoctorSpecialized,
       Conversation,
-      Message
+      Message,
+      Feedback
     ])
   ],
   controllers: [UserController],
