@@ -13,7 +13,12 @@ export class SpecializedService {
 
 
     async getAll() {
-
-        return this.specializedRepository.find();
+        const specialized = await this.specializedRepository.find();
+        const result = specialized.slice(0, 6).map((spec) => ({
+            ...spec,
+            description: 'World-class care for everyone. Our health System offers unmatched, expert health care. From the lab to the clinic.'
+        }))
+        console.log("result", result)
+        return result
     }
 }
