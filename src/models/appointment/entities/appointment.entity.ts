@@ -1,5 +1,6 @@
+import BookingHistory from "models/booking_history/entities/booking_history.entity";
 import { User } from "models/user/entities/user.entity";
-import { BaseEntity, Column, Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn } from "typeorm";
+import { BaseEntity, Column, Entity, JoinColumn, ManyToOne, OneToMany, PrimaryGeneratedColumn } from "typeorm";
 
 @Entity()
 export default class Appointment extends BaseEntity {
@@ -32,5 +33,8 @@ export default class Appointment extends BaseEntity {
     @ManyToOne(() => User, patient => patient.appointmentPatient)
     @JoinColumn({ name: "patient_id" })
     patient: User
+
+    @OneToMany(() => BookingHistory, bookingHistory => bookingHistory.appointment)
+    bookingHistory: BookingHistory[]
 }
 //  Status (Scheduled/Completed/Cancelled)

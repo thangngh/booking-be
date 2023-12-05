@@ -6,7 +6,7 @@ export class PatientRegister extends BaseEntity {
     @PrimaryGeneratedColumn()
     id: number;
 
-    @Column()
+    @Column({ nullable: true })
     symptom: string;
 
     @Column({ nullable: true })

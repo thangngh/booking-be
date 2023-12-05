@@ -16,6 +16,7 @@ export class UserRoleService {
   ) { }
 
   async createTransitionSaveRoleUser(user: User, roleId: string) {
+    console.log("user ", user, roleId)
     const transition = await this.userRoleRepository.manager.connection.createQueryRunner();
 
 
@@ -24,18 +25,13 @@ export class UserRoleService {
 
     try {
       const userRole = new UserRole({
-        userId: +(user as unknown as string),
+        userId: user?.id,
         roleId: +roleId
       })
       const query = await transition.manager.save(userRole)
-      // const recipe = await queryRunner.manager.save(recipeIns);
-
-      // recipe && this.userRecipeService.create({
-      //   userId: user.id,
-      //   recipeId: recipe.id
-      // });
 
       await transition.commitTransaction();
+      return query
     } catch (error) {
       await transition.rollbackTransaction();
       throw new HttpException(error.message, HttpStatus.BAD_REQUEST);

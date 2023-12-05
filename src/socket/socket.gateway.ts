@@ -33,7 +33,7 @@ export class SocketGateway implements OnGatewayConnection, OnGatewayDisconnect {
     @SubscribeMessage("approved_booking")
     async approvedBooking(client: Socket, payload: any) {
 
-        const { doctor_Id, patient_id, patient_client_id } = payload
+        const { doctor_Id, patient_id, patient_client_id, status } = payload
 
         const body = [doctor_Id, patient_id].map((value) => ({ userId: value }))
 

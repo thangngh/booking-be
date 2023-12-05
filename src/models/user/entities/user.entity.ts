@@ -34,6 +34,12 @@ export class User extends BaseRepository {
     address: IAddress
 
     @Column({ nullable: true })
+    symptom: string;
+
+    @Column({ nullable: true })
+    insurance: string
+
+    @Column({ nullable: true })
     avatar: string
 
     @Column({ nullable: true, type: 'enum', enum: EGender })

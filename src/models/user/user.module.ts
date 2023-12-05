@@ -23,7 +23,7 @@ import Appointment from 'models/appointment/entities/appointment.entity';
       Message,
       Feedback,
       Appointment
-    ])
+    ]),
   ],
   controllers: [UserController],
   providers: [UserService, UserRepository],

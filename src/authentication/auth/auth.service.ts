@@ -3,7 +3,7 @@ import { JwtService } from '@nestjs/jwt';
 import { UserService } from 'models/user/user.service';
 import { IJwtPayload, ILogin, IRegister } from './interface/auth.interface';
 import { User } from 'models/user/entities/user.entity';
-import { EActive, EProviderType, IBody, hashValue, validateHash } from 'common/constants/setting';
+import { EActive, EProviderType, IBody, RoleType, hashValue, validateHash } from 'common/constants/setting';
 import { Response } from 'express';
 import { IUpdateRT } from 'models/user/user.interface';
 import { ConfigService } from '@nestjs/config';
@@ -12,6 +12,7 @@ import { RoleService } from 'models/role/role.service';
 import { SendMail } from './dto/send-mail.dto';
 import { MailerService } from '@nestjs-modules/mailer';
 import { validateTokenPassword } from './dto/verify-password.dto';
+import { CreatePatientRegisterDto } from 'models/user/dto/create-patient_register.dto';
 
 @Injectable()
 export class AuthService {
@@ -254,4 +255,11 @@ export class AuthService {
         };
     }
 
+    async createPatient(user: User, body: CreatePatientRegisterDto) {
+        const query = await this.userService.createPatient(user, body)
+        const getRoleName = await this.roleService.getRoleByName(RoleType['PATIENT'])
+        const updateRole = await this.userRoleService.createTransitionSaveRoleUser(user, getRoleName.id.toString())
+
+        return { ...query, updateRole }
+    }
 }
