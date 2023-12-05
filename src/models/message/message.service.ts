@@ -15,6 +15,8 @@ export class MessageService {
         private readonly conversationService: ConversationService
     ) { }
 
+    // async receiveMessage(){}
+
     async createMessage(sender: User, data: CreateMessageDto) {
         const { body, conversation } = data;
 

@@ -1,4 +1,4 @@
-import { HttpException, HttpStatus, Injectable, UnauthorizedException, Res, BadRequestException } from '@nestjs/common';
+import { HttpException, HttpStatus, Injectable, UnauthorizedException, Res } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { UserService } from 'models/user/user.service';
 import { IJwtPayload, ILogin, IRegister } from './interface/auth.interface';
@@ -21,8 +21,7 @@ export class AuthService {
         private readonly jwtService: JwtService,
         private readonly userRoleService: UserRoleService,
         private readonly roleService: RoleService,
-        private readonly configService: ConfigService,
-        private readonly mailService: MailerService
+        private readonly configService: ConfigService
     ) { }
 
     async login(body: ILogin, @Res() res: Response) {
@@ -31,7 +30,7 @@ export class AuthService {
         const findUser = await this.userService.queryUsername({ username })
 
         if (findUser.length === 0) {
-            throw new BadRequestException('Access Denied !')
+            throw new HttpException('Access Denied !', HttpStatus.BAD_REQUEST);
         }
 
         const userRp = new User(findUser[0])
@@ -49,7 +48,7 @@ export class AuthService {
         const user = `${userRp.firstName} ${userRp.lastName}`
 
         const { accessToken, refreshToken } = await this.signToken(userRp.id.toString(), userRp?.username);
-
+        console.log("token", { accessToken, refreshToken })
         await this.userService.saveRefreshToken(userRp?.id, { refreshToken })
 
         res.cookie('refreshToken', refreshToken, { httpOnly: true });
@@ -136,12 +135,10 @@ export class AuthService {
         const { refreshToken } = await this.signToken(saveUser?.insertId.toString(), user?.username);
 
         await this.userService.saveRefreshToken(saveUser?.insertId, { refreshToken })
-        const findUser = await this.userService.findUserById(saveUser?.insertId.toString())
 
         return {
             status: HttpStatus.OK,
             message: 'Register successfully',
-            user: findUser
         }
     }
 
