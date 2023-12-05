@@ -26,8 +26,10 @@ export class DoctorRegisterService {
             })
 
             const save = await transition.manager.save(created)
-            console.log("created", save)
+
             await transition.commitTransaction()
+
+            return save;
         } catch (error) {
             await transition.rollbackTransaction();
 

@@ -15,9 +15,9 @@ export class MessageController {
     return this.messageService.getConversation(id)
   }
 
-  @UseGuards(JwtGuard)
-  @Post("/create-message")
-  async createMessage(@ReqUser() user: User, @Body() data: CreateMessageDto) {
-    return this.messageService.createMessage(user, data)
-  }
+  // @UseGuards(JwtGuard)
+  // @Post("/create-message")
+  // async createMessage(@ReqUser() user: User, @Body() data: CreateMessageDto) {
+  //   return this.messageService.createMessage(user, data)
+  // }
 }

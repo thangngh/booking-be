@@ -3,6 +3,7 @@ import { UserRoleService } from './user-role.service';
 import { User } from 'models/user/entities/user.entity';
 import { ReqUser } from 'common/decorators/rep-user.decorator';
 import { JwtGuard } from 'authentication/auth/guards/jwt.guard';
+import { RoleType } from 'common/constants/setting';
 
 @Controller('user-role')
 export class UserRoleController {
@@ -13,6 +14,12 @@ export class UserRoleController {
   @Get("/get-user-role")
   listRoleUser(@ReqUser() user: User) {
     return this.userRoleService.listRoleUser(user)
+  }
+
+  @UseGuards(JwtGuard)
+  @Post("/create-role")
+  createRole(@ReqUser() user: User, @Body() role: RoleType) {
+    return this.userRoleService.createRole(user, role);
   }
 
 }

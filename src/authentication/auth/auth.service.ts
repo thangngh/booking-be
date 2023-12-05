@@ -1,14 +1,17 @@
-import { HttpException, HttpStatus, Injectable, UnauthorizedException, Res } from '@nestjs/common';
+import { HttpException, HttpStatus, Injectable, UnauthorizedException, Res, BadRequestException } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { UserService } from 'models/user/user.service';
 import { IJwtPayload, ILogin, IRegister } from './interface/auth.interface';
 import { User } from 'models/user/entities/user.entity';
-import { EActive, EProviderType, hashValue, validateHash } from 'common/constants/setting';
+import { EActive, EProviderType, IBody, hashValue, validateHash } from 'common/constants/setting';
 import { Response } from 'express';
 import { IUpdateRT } from 'models/user/user.interface';
 import { ConfigService } from '@nestjs/config';
 import { UserRoleService } from 'models/user-role/user-role.service';
 import { RoleService } from 'models/role/role.service';
+import { SendMail } from './dto/send-mail.dto';
+import { MailerService } from '@nestjs-modules/mailer';
+import { validateTokenPassword } from './dto/verify-password.dto';
 
 @Injectable()
 export class AuthService {
@@ -17,7 +20,8 @@ export class AuthService {
         private readonly jwtService: JwtService,
         private readonly userRoleService: UserRoleService,
         private readonly roleService: RoleService,
-        private readonly configService: ConfigService
+        private readonly configService: ConfigService,
+        private readonly mailService: MailerService
     ) { }
 
     async login(body: ILogin, @Res() res: Response) {
@@ -26,7 +30,7 @@ export class AuthService {
         const findUser = await this.userService.queryUsername({ username })
 
         if (findUser.length === 0) {
-            throw new HttpException('Access Denied !', HttpStatus.BAD_REQUEST);
+            throw new BadRequestException('Access Denied !')
         }
 
         const userRp = new User(findUser[0])
@@ -44,7 +48,7 @@ export class AuthService {
         const user = `${userRp.firstName} ${userRp.lastName}`
 
         const { accessToken, refreshToken } = await this.signToken(userRp.id.toString(), userRp?.username);
-        console.log("token", { accessToken, refreshToken })
+
         await this.userService.saveRefreshToken(userRp?.id, { refreshToken })
 
         res.cookie('refreshToken', refreshToken, { httpOnly: true });
@@ -131,10 +135,12 @@ export class AuthService {
         const { refreshToken } = await this.signToken(saveUser?.insertId.toString(), user?.username);
 
         await this.userService.saveRefreshToken(saveUser?.insertId, { refreshToken })
+        const findUser = await this.userService.findUserById(saveUser?.insertId.toString())
 
         return {
             status: HttpStatus.OK,
             message: 'Register successfully',
+            user: findUser
         }
     }
 
@@ -158,4 +164,94 @@ export class AuthService {
 
         return { accessToken, refreshToken };
     }
+
+    async sendEmailResetPassword(body: SendMail) {
+        const { email } = body;
+
+        const findUser = await this.userService.queryEmail({ email })
+
+        const generateToken = await this.jwtService.sign(
+            { email },
+            { expiresIn: '15m' }
+        )
+
+        const URL = `change-password?token=${generateToken}`;
+
+        findUser && this.mailService.sendMail({
+            from: this.configService.get('MAIL_USER'),
+            to: email,
+            subject: 'reset password',
+            template: 'reset-password',
+            context: {
+                email: email,
+                resetLink: this.configService.get('FE_HOST') + URL,
+                contact: this.configService.get('MAIL_USER'),
+            },
+        });
+
+        return {
+            status: HttpStatus.OK,
+        };
+
+    }
+
+    async changePasswordWithVerifyToken(body: validateTokenPassword) {
+        const { token, password } = body;
+
+        try {
+            const decoded: any = this.jwtService.verify(token);
+            const user = await this.userService.queryEmail({ email: decoded.email })
+
+            if (!user) {
+                throw new HttpException('Some thing went wrong!, User not exist', HttpStatus.BAD_REQUEST);
+            }
+
+            user.password = password;
+            const update = await this.userService.saveUser(user);
+
+            if (!update)
+                throw new HttpException(
+                    'Some thing went wrong!',
+                    HttpStatus.INTERNAL_SERVER_ERROR,
+                );
+
+            return {
+                message: 'Update password success!',
+                statusCode: HttpStatus.OK,
+            };
+        } catch (error) {
+            if (error.name === 'TokenExpiredError') {
+                throw new HttpException('Token has expired', HttpStatus.BAD_REQUEST);
+            }
+        }
+
+
+    }
+
+    async changePassword(user: User, body: IBody) {
+        const { oldPassword, newPassword } = body;
+        const { id } = user;
+
+        const userRepository = await this.userService.findUserById(id.toString())
+
+        if (userRepository?.length === 0) {
+            throw new HttpException('User not found', HttpStatus.BAD_REQUEST);
+        }
+
+        const isMatch = await validateHash(userRepository.password, oldPassword);
+
+        if (!isMatch) {
+            throw new HttpException('CurrentPassword is incorrect', HttpStatus.BAD_REQUEST);
+        }
+
+        const newPass = await hashValue(newPassword);
+
+
+        await this.userService.updatePassword(user, { password: newPass })
+        return {
+            status: HttpStatus.OK,
+            message: `Change Password successfully`,
+        };
+    }
+
 }
