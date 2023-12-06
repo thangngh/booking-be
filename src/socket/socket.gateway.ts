@@ -5,11 +5,7 @@ import { MessageService } from 'models/message/message.service';
 import { UserService } from 'models/user/user.service';
 import { Server, Socket } from 'socket.io';
 
-@WebSocketGateway({
-    cors: {
-        origin: '*',
-    },
-})
+@WebSocketGateway({ transports: ['websocket'], cors: true })
 export class SocketGateway implements OnGatewayConnection, OnGatewayDisconnect {
 
     @WebSocketServer()
@@ -28,15 +24,15 @@ export class SocketGateway implements OnGatewayConnection, OnGatewayDisconnect {
     }
 
     handleConnection(client: any) {
-        this.logger.verbose("Client Connected ...!")
+        this.logger.verbose(`Client Connected ...!: ${client.id}`)
     }
 
     handleDisconnect(client: any) {
         this.logger.verbose("Client Disconnected ...!")
     }
 
-    @SubscribeMessage("notify_booking")
-    notifyBooking(client: Socket, payload: unknown) {
+    @SubscribeMessage("approved_booking")
+    async approvedBooking(client: Socket, payload: any) {
 
         const { doctor_Id, patient_id, patient_client_id } = payload
 
@@ -58,13 +54,24 @@ export class SocketGateway implements OnGatewayConnection, OnGatewayDisconnect {
         this.server.emit("notify_approved", { data: doctorSendNotify })
     }
 
-    @SubscribeMessage('create_message')
-    successBooking(client: Socket, payload: payloadBooking): void {
-        this.server.emit('msgToClient', payload);
+    @SubscribeMessage("reject_booking")
+    async rejectBooking(client: Socket, payload: any) {
+
+        const { doctor_Id, patient_id, patient_client_id, status } = payload
+
+
+        const getDoctor = await this.userService.findUserById(doctor_Id)
+
+        const doctorName = getDoctor && `${getDoctor.firstName} ${getDoctor.lastName}`;
+
+        const doctorSendNotify = `Bác sỹ ${doctorName} từ chối đặt lịch`
+
+        this.server.emit("notify_reject", doctorSendNotify)
     }
 
     @SubscribeMessage("received_message")
-    handleMessage(client: Socket, payload: unknown) {
+    handleMessage(client: Socket, payload: any) {
+        const { seender, clientId } = payload;
 
         this.server.emit("send_message", payload)
     }

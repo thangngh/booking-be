@@ -13,7 +13,9 @@ import { JwtService } from '@nestjs/jwt';
 import { SendMail } from './dto/send-mail.dto';
 import { validateTokenPassword } from './dto/verify-password.dto';
 import { IBody } from 'common/constants/setting';
+import { ApiTags } from '@nestjs/swagger';
 @Controller('auth')
+@ApiTags("auth")
 export class AuthController {
   constructor(private readonly authService: AuthService, private readonly jwtService: JwtService) { }
 

@@ -158,4 +158,12 @@ export class UserRepository {
             UPDATE user SET ${fields} = ? WHERE id = ?
         `, [value, id])
     }
+
+    async createPatient(id: number, symptom: string, insurance: string) {
+        const query = await this.userRepository.query(`
+        UPDATE user SET symptom = ?, insurance = ? WHERE id = ?
+        `, [symptom, insurance, id])
+
+        return query;
+    }
 }

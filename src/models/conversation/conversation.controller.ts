@@ -4,8 +4,10 @@ import { ReqUser } from 'common/decorators/rep-user.decorator';
 import { User } from 'models/user/entities/user.entity';
 import { JwtGuard } from 'authentication/auth/guards/jwt.guard';
 import { createConversationDto } from './dto/create-conversation.dto';
+import { ApiTags } from '@nestjs/swagger';
 
 @Controller('conversation')
+@ApiTags("conversation")
 export class ConversationController {
   constructor(private readonly conversationService: ConversationService) { }
 

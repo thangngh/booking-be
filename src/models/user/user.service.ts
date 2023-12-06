@@ -10,6 +10,7 @@ import { UserRepository } from './user.repository';
 import { IUpdateRT } from './user.interface';
 import { PaginationDTO } from 'common/pagination/dto/paginationQuery-dto';
 import { Pagination } from 'common/pagination';
+import { CreatePatientRegisterDto } from './dto/create-patient_register.dto';
 
 @Injectable()
 export class UserService {
@@ -121,6 +122,12 @@ export class UserService {
       status: "Upload avatar success!",
       data: resultUser
     }
+  }
+
+  async createPatient(user: User, body: CreatePatientRegisterDto) {
+    const query = await this.userRepository.createPatient(user.id, body.symptom, body.insurance)
+
+    return query && await this.findUserById(user.id.toString())
   }
 
 }

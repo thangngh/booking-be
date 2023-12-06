@@ -1,5 +1,5 @@
-import { BaseEntity, Column, Entity, PrimaryGeneratedColumn } from "typeorm";
-
+import Appointment from "models/appointment/entities/appointment.entity";
+import { BaseEntity, Column, Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn } from "typeorm";
 @Entity()
 export default class BookingHistory extends BaseEntity {
 
@@ -11,5 +11,9 @@ export default class BookingHistory extends BaseEntity {
 
     @Column()
     status: string;
+
+    @ManyToOne(() => Appointment, appointment => appointment.bookingHistory)
+    @JoinColumn({ name: 'appointment_id' })
+    appointment: Appointment
 }
 //  Status (Confirmed/Cancelled)

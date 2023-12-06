@@ -1,4 +1,4 @@
-import { Controller, UseGuards, Get, Post, Body, Patch, Res, Param, Delete, Query, UseInterceptors, UploadedFiles } from '@nestjs/common';
+import { Controller, UseGuards, Get, Post, Body, Patch, Res, Param, Delete, Query, UseInterceptors, UploadedFiles, Put } from '@nestjs/common';
 import { UserService } from './user.service';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
@@ -7,9 +7,12 @@ import { ReqUser } from 'common/decorators/rep-user.decorator';
 import { User } from './entities/user.entity';
 import { JwtGuard } from 'authentication/auth/guards/jwt.guard';
 import { FilesInterceptor } from '@nestjs/platform-express';
-import { SharpPipe } from 'common/pipes/sharp.pipe';
 import * as admin from 'firebase-admin';
+import { SharpPipe } from 'common/pipes/sharp.pipe';
+import { ApiTags } from '@nestjs/swagger';
+
 @Controller('user')
+@ApiTags("user")
 export class UserController {
   constructor(private readonly userService: UserService) { }
 

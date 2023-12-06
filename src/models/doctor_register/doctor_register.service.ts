@@ -6,17 +6,21 @@ import { DoctorRegister } from './entities/doctor_register.entity';
 import { Repository } from 'typeorm';
 import { User } from 'models/user/entities/user.entity';
 import { JwtService } from '@nestjs/jwt';
-
+import { UserRoleService } from 'models/user-role/user-role.service';
+import { RoleService } from 'models/role/role.service';
+import { RoleType } from 'common/constants/setting';
 @Injectable()
 export class DoctorRegisterService {
     constructor(
         @InjectRepository(DoctorRegister) private readonly doctorRepository: Repository<DoctorRegister>,
+        private readonly userRoleService: UserRoleService,
+        private readonly roleService: RoleService
     ) { }
 
     async registerDoctor(user: User, body: CreateDoctorRegisterDto) {
         const { id } = user;
         const transition = await this.doctorRepository.manager.connection.createQueryRunner();
-
+        const roleDoctor = await this.roleService.getRoleByName(RoleType['DOCTOR'])
         await transition.connect();
         await transition.startTransaction();
 
@@ -26,10 +30,10 @@ export class DoctorRegisterService {
             })
 
             const save = await transition.manager.save(created)
-
+            const saveRole = await this.userRoleService.createTransitionSaveRoleUser(user, (roleDoctor?.id)?.toString())
             await transition.commitTransaction()
 
-            return save;
+            return { ...save, ...saveRole };
         } catch (error) {
             await transition.rollbackTransaction();
 
