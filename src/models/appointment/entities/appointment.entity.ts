@@ -1,5 +1,5 @@
 import { User } from "models/user/entities/user.entity";
-import { BaseEntity, Column, Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn } from "typeorm";
+import { BaseEntity, Column, Entity, PrimaryGeneratedColumn } from "typeorm";
 
 @Entity()
 export default class Appointment extends BaseEntity {
@@ -18,19 +18,5 @@ export default class Appointment extends BaseEntity {
 
     @Column({ name: 'patient_id' })
     patientId: number;
-
-    @Column()
-    status: string;
-
-    @Column()
-    clientId: string;
-
-    @ManyToOne(() => User, doctor => doctor.appointmentDoctor)
-    @JoinColumn({ name: "doctor_id" })
-    doctor: User
-
-    @ManyToOne(() => User, patient => patient.appointmentPatient)
-    @JoinColumn({ name: "patient_id" })
-    patient: User
 }
 //  Status (Scheduled/Completed/Cancelled)

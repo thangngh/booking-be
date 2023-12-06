@@ -10,7 +10,6 @@ import { DoctorSpecialized } from 'models/doctor_specialized/entities/doctor_spe
 import { Conversation } from 'models/conversation/entities/conversation.entity';
 import { Message } from 'models/message/entities/message.entity';
 import { Feedback } from 'models/feedback/entities/feedback.entity';
-import Appointment from 'models/appointment/entities/appointment.entity';
 
 @Module({
   imports: [
@@ -21,8 +20,7 @@ import Appointment from 'models/appointment/entities/appointment.entity';
       DoctorSpecialized,
       Conversation,
       Message,
-      Feedback,
-      Appointment
+      Feedback
     ])
   ],
   controllers: [UserController],

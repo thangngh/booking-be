@@ -8,8 +8,5 @@ export default class BookingHistory extends BaseEntity {
 
     @Column({ name: 'appointment_id' })
     appointmentId: number
-
-    @Column()
-    status: string;
 }
 //  Status (Confirmed/Cancelled)

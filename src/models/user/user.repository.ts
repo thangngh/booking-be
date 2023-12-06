@@ -146,16 +146,4 @@ export class UserRepository {
 
         return { results, total };
     }
-
-    async updatePassword(id: number, password: string) {
-        return await this.userRepository.query(`
-            UPDATE user SET password = ? WHERE id = ?
-        `, [password, id])
-    }
-
-    async updateField(id: number, fields: string, value: string) {
-        return await this.userRepository.query(`
-            UPDATE user SET ${fields} = ? WHERE id = ?
-        `, [value, id])
-    }
 }

@@ -1,4 +1,4 @@
-import { HttpException, HttpStatus, Inject, Injectable } from '@nestjs/common';
+import { Inject, Injectable } from '@nestjs/common';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { InjectRepository } from '@nestjs/typeorm';
@@ -91,36 +91,4 @@ export class UserService {
 
     return await this.userRepository.getUserRole(id)
   }
-
-  async updatePassword(user: User, body: IBody) {
-    const { id } = user
-    const { password } = body;
-
-    const query = await this.userRepository.updatePassword(id, password)
-
-    const resultUser = query && await this.findUserById(id.toString())
-
-    return resultUser;
-  }
-
-  async uploadAvatar(user: User, file: Array<Express.Multer.File>) {
-    const { id } = user;
-    const avatarPath = file.join("");
-
-    const findUser = await this.findUserById(id.toString())
-
-    if (findUser?.length === 0) {
-      throw new HttpException("User not found", HttpStatus.BAD_REQUEST)
-    }
-
-    const updateUser = await this.userRepository.updateField(findUser[0]?.id, "avatar", avatarPath)
-
-    const resultUser = updateUser && await this.findUserById(id.toString())
-
-    return {
-      status: "Upload avatar success!",
-      data: resultUser
-    }
-  }
-
 }

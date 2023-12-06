@@ -21,12 +21,11 @@ async function bootstrap() {
     storageBucket: process.env.STORAGE_BUCKET,
   });
 
-  await app.enableCors({
-    // allowedHeaders: ['Authorization'],
-    // credentials: true,
-    // origin: "*"
-  });
-
+  // await app.enableCors({
+  //   // allowedHeaders: ['Authorization'],
+  //   // credentials: true
+  //   origin: "*"
+  // });
   app.enableCors();
 
 
