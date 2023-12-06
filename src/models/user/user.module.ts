@@ -20,7 +20,8 @@ import { Feedback } from 'models/feedback/entities/feedback.entity';
       DoctorSpecialized,
       Conversation,
       Message,
-      Feedback
+      Feedback,
+      Appointment
     ])
   ],
   controllers: [UserController],

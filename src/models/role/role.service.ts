@@ -21,4 +21,13 @@ export class RoleService {
             roleName: queryRole.roleName
         }
     }
+
+    async getRoleByName(roleName: RoleType) {
+        const query = await this.roleRepository.createQueryBuilder("role")
+            .select("query.id")
+            .where("role.roleName = :name", { name: RoleType[roleName] })
+            .execute()
+
+        return query;
+    }
 }
