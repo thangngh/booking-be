@@ -1,6 +1,5 @@
 import Appointment from "models/appointment/entities/appointment.entity";
 import { BaseEntity, Column, Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn } from "typeorm";
-
 @Entity()
 export default class BookingHistory extends BaseEntity {
 

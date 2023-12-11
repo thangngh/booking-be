@@ -4,8 +4,10 @@ import { ReqUser } from 'common/decorators/rep-user.decorator';
 import { User } from 'models/user/entities/user.entity';
 import CreateMessageDto from './dto/create-message.dto';
 import { JwtGuard } from 'authentication/auth/guards/jwt.guard';
+import { ApiTags } from '@nestjs/swagger';
 
 @Controller('message')
+@ApiTags("message")
 export class MessageController {
   constructor(private readonly messageService: MessageService) { }
 

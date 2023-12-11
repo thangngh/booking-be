@@ -4,7 +4,6 @@ import { Repository } from 'typeorm';
 import BookingHistory from './entities/booking_history.entity';
 import { CreateBookingHistoryDto } from './dto/Create.booking_history.dto';
 import { User } from 'models/user/entities/user.entity';
-
 @Injectable()
 export class BookingHistoryService {
     constructor(

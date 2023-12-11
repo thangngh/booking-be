@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete, Res, UseGuards, ValidationPipe, Put } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, Res, UseGuards, ValidationPipe } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { RegisterDto } from './dto/register-dto';
 import { LoginDto } from './dto/login-dto';
@@ -13,8 +13,7 @@ import { JwtService } from '@nestjs/jwt';
 import { SendMail } from './dto/send-mail.dto';
 import { validateTokenPassword } from './dto/verify-password.dto';
 import { IBody } from 'common/constants/setting';
-import { ApiTags } from '@nestjs/swagger'
-import { CreatePatientRegisterDto } from 'models/user/dto/create-patient_register.dto';
+import { ApiTags } from '@nestjs/swagger';
 @Controller('auth')
 @ApiTags("auth")
 export class AuthController {
@@ -60,12 +59,6 @@ export class AuthController {
   @Patch("/change-password")
   async changePassword(@ReqUser() user: User, @Body() body: IBody) {
     return this.authService.changePassword(user, body);
-  }
-
-  @UseGuards(JwtGuard)
-  @Put("/create-patient")
-  createPatient(@ReqUser() user: User, @Body() body: CreatePatientRegisterDto) {
-    return this.authService.createPatient(user, body)
   }
 
 }

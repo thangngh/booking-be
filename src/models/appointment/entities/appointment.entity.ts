@@ -8,10 +8,10 @@ export default class Appointment extends BaseEntity {
     @PrimaryGeneratedColumn()
     id: number;
 
-    @Column()
+    @Column({ nullable: true })
     fromDate: Date;
 
-    @Column()
+    @Column({ nullable: true })
     toDate: Date;
 
     @Column({ name: 'doctor_id' })

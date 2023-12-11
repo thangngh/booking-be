@@ -7,10 +7,12 @@ import { ReqUser } from 'common/decorators/rep-user.decorator';
 import { User } from './entities/user.entity';
 import { JwtGuard } from 'authentication/auth/guards/jwt.guard';
 import { FilesInterceptor } from '@nestjs/platform-express';
-import { SharpPipe } from 'common/pipes/sharp.pipe';
 import * as admin from 'firebase-admin';
-import { CreatePatientRegisterDto } from './dto/create-patient_register.dto';
+import { SharpPipe } from 'common/pipes/sharp.pipe';
+import { ApiTags } from '@nestjs/swagger';
+
 @Controller('user')
+@ApiTags("user")
 export class UserController {
   constructor(private readonly userService: UserService) { }
 

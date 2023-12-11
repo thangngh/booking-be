@@ -5,8 +5,10 @@ import { UpdateDoctorRegisterDto } from './dto/update-doctor_register.dto';
 import { JwtGuard } from 'authentication/auth/guards/jwt.guard';
 import { ReqUser } from 'common/decorators/rep-user.decorator';
 import { User } from 'models/user/entities/user.entity';
+import { ApiTags } from '@nestjs/swagger';
 
 @Controller('doctor-register')
+@ApiTags("doctor-register")
 export class DoctorRegisterController {
   constructor(private readonly doctorRegisterService: DoctorRegisterService) { }
 

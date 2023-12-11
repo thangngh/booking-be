@@ -9,7 +9,6 @@ import { JwtService } from '@nestjs/jwt';
 import { UserRoleService } from 'models/user-role/user-role.service';
 import { RoleService } from 'models/role/role.service';
 import { RoleType } from 'common/constants/setting';
-
 @Injectable()
 export class DoctorRegisterService {
     constructor(
