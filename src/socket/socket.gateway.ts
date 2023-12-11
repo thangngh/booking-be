@@ -24,17 +24,17 @@ export class SocketGateway implements OnGatewayConnection, OnGatewayDisconnect {
     }
 
     handleConnection(client: any) {
-        this.logger.verbose(`Client Connected ...!: ${client.id}`)
+        this.logger.verbose("Client Connected ...!")
     }
 
     handleDisconnect(client: any) {
         this.logger.verbose("Client Disconnected ...!")
     }
 
-    @SubscribeMessage("approved_booking")
-    async approvedBooking(client: Socket, payload: any) {
+    @SubscribeMessage("notify_booking")
+    notifyBooking(client: Socket, payload: unknown) {
 
-        const { doctor_Id, patient_id, patient_client_id } = payload
+        const { doctor_Id, patient_id, patient_client_id, status } = payload
 
         const body = [doctor_Id, patient_id].map((value) => ({ userId: value }))
 
@@ -70,8 +70,7 @@ export class SocketGateway implements OnGatewayConnection, OnGatewayDisconnect {
     }
 
     @SubscribeMessage("received_message")
-    handleMessage(client: Socket, payload: any) {
-        const { seender, clientId } = payload;
+    handleMessage(client: Socket, payload: unknown) {
 
         this.server.emit("send_message", payload)
     }

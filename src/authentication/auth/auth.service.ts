@@ -1,4 +1,4 @@
-import { HttpException, HttpStatus, Injectable, UnauthorizedException, Res, BadRequestException } from '@nestjs/common';
+import { HttpException, HttpStatus, Injectable, UnauthorizedException, Res } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { UserService } from 'models/user/user.service';
 import { IJwtPayload, ILogin, IRegister } from './interface/auth.interface';
@@ -139,7 +139,6 @@ export class AuthService {
         return {
             status: HttpStatus.OK,
             message: 'Register successfully',
-            user: findUser
         }
     }
 
@@ -260,5 +259,4 @@ export class AuthService {
 
         return { ...query, updateRole }
     }
-
 }

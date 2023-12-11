@@ -18,10 +18,4 @@ export class UserRoleController {
     return this.userRoleService.listRoleUser(user)
   }
 
-  @UseGuards(JwtGuard)
-  @Post("/create-role")
-  createRole(@ReqUser() user: User, @Body() role: RoleType) {
-    return this.userRoleService.createRole(user, role);
-  }
-
 }

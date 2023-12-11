@@ -28,7 +28,6 @@ export class DoctorRegisterService {
             const created = await transition.manager.create(DoctorRegister, {
                 phone: body.phone, certification: body.certification, email: body.email, timeBegin: body.timeBegin, timeEnd: body.timeEnd, userId: id
             })
-
             const save = await transition.manager.save(created)
             const saveRole = await this.userRoleService.createTransitionSaveRoleUser(user, (roleDoctor?.id)?.toString())
             await transition.commitTransaction()

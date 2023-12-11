@@ -6,16 +6,15 @@ import { UserRole } from './entities/user-role.entity';
 import { Repository } from 'typeorm';
 import { User } from 'models/user/entities/user.entity';
 import { RoleType } from 'common/constants/setting';
-import { RoleService } from 'models/role/role.service';
 
 @Injectable()
 export class UserRoleService {
   constructor(
-    @InjectRepository(UserRole) private readonly userRoleRepository: Repository<UserRole>,
-    private readonly roleService: RoleService
+    @InjectRepository(UserRole) private readonly userRoleRepository: Repository<UserRole>
   ) { }
 
   async createTransitionSaveRoleUser(user: User, roleId: string) {
+    console.log("user ", user, roleId)
     const transition = await this.userRoleRepository.manager.connection.createQueryRunner();
 
 
@@ -28,12 +27,6 @@ export class UserRoleService {
         roleId: +roleId
       })
       const query = await transition.manager.save(userRole)
-      // const recipe = await queryRunner.manager.save(recipeIns);
-
-      // recipe && this.userRecipeService.create({
-      //   userId: user.id,
-      //   recipeId: recipe.id
-      // });
 
       await transition.commitTransaction();
       return query
@@ -100,23 +93,5 @@ export class UserRoleService {
     })
 
     return query.length > 0
-  }
-
-  async createRole(user: User, role: RoleType) {
-    const { id } = user;
-    const getRoleId = await this.roleService.getRoleByName(role)
-
-    const query = await this.userRoleRepository.createQueryBuilder()
-      .insert()
-      .into(UserRole)
-      .values({
-        userId: id,
-        roleId: getRoleId.id
-      })
-      .execute()
-
-    return query && {
-      message: 'Successful !'
-    }
   }
 }

@@ -1,8 +1,4 @@
-import { HttpException, HttpStatus, Inject, Injectable } from '@nestjs/common';
-import { CreateUserDto } from './dto/create-user.dto';
-import { UpdateUserDto } from './dto/update-user.dto';
-import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
+import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { User } from './entities/user.entity';
 import { IBody, hashValue } from 'common/constants/setting';
 import { IJwtPayload } from 'authentication/auth/interface/auth.interface';
@@ -16,7 +12,7 @@ import { CreatePatientRegisterDto } from './dto/create-patient_register.dto';
 export class UserService {
   constructor(
     // @InjectRepository(User) private readonly userRepository: Repository<User>
-    private readonly userRepository: UserRepository
+    private readonly userRepository: UserRepository,
   ) { }
 
   async queryUsername(body: IBody) {
