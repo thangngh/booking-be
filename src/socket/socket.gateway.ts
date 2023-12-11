@@ -32,7 +32,7 @@ export class SocketGateway implements OnGatewayConnection, OnGatewayDisconnect {
     }
 
     @SubscribeMessage("notify_booking")
-    notifyBooking(client: Socket, payload: unknown) {
+    async notifyBooking(client: Socket, payload: any) {
 
         const { doctor_Id, patient_id, patient_client_id, status } = payload
 

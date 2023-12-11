@@ -1,5 +1,6 @@
 import * as bcrypt from 'bcrypt';
 import { EGender, EProviderType, IAddress } from 'common/constants/setting';
+import Appointment from 'models/appointment/entities/appointment.entity';
 import { Conversation } from 'models/conversation/entities/conversation.entity';
 import { DoctorRegister } from 'models/doctor_register/entities/doctor_register.entity';
 import { DoctorSpecialized } from 'models/doctor_specialized/entities/doctor_specialized.entity';
@@ -49,12 +50,6 @@ export class User extends BaseRepository {
 
     @Column({ nullable: false })
     email: string;
-
-    @Column({ nullable: true })
-    symptom: string;
-
-    @Column({ nullable: true })
-    insurance: string
 
     @Column({ name: 'refresh_token', nullable: true })
     refreshToken: string;

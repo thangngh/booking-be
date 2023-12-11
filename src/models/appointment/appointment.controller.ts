@@ -10,4 +10,10 @@ import { ApiTags } from '@nestjs/swagger';
 @ApiTags("appointment")
 export class AppointmentController {
   constructor(private readonly appointmentService: AppointmentService) { }
+
+  @UseGuards(JwtGuard)
+  @Put("/change-status")
+  changeStatus(@ReqUser() user: User, @Body() status: IBody) {
+    return this.appointmentService.changeStatus(user, status)
+  }
 }
