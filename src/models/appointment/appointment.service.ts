@@ -42,22 +42,27 @@ export class AppointmentService {
     async getAppointmentByDoctor(user: User) {
         const query = await this.appointmentRepository.createQueryBuilder("appointment")
             .leftJoinAndSelect("appointment.doctor", "doctor")
+            .leftJoinAndSelect("appointment.patient", "patient")
             .where("doctor.id = :id", { id: user.id })
             .getMany()
 
         return query
     }
 
-    async changeStatus(user: User, status: IBody) {
-        const { value } = status;
+    async changeStatus(doctor: string, appointmentId: string, value: IBody) {
+
+        const { status } = value;
         const query = await this.appointmentRepository.createQueryBuilder()
             .update(Appointment)
             .set({
-                status: value
+                status: status
             })
-            .where("doctor.id = :id", { id: user.id })
-            .execute()
+            .where("doctorId = :doctorId", { doctorId: doctor })
+            .andWhere("id = :appointmentId", { appointmentId: appointmentId })
+            .execute();
 
-        console.log("query", query)
+        const result = query && await this.getOne(+appointmentId)
+
+        return result
     }
 }

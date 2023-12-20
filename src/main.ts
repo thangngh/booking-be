@@ -20,13 +20,7 @@ async function bootstrap() {
     credential: admin.credential.cert(join('./firebase-service.json')),
     storageBucket: process.env.STORAGE_BUCKET,
   });
-
-  // await app.enableCors({
-  //   // allowedHeaders: ['Authorization'],
-  //   // credentials: true
-  //   origin: "*"
-  // });
-  app.enableCors();
+  await app.enableCors();
 
 
   app.setGlobalPrefix('api');

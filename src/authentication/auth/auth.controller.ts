@@ -14,6 +14,7 @@ import { SendMail } from './dto/send-mail.dto';
 import { validateTokenPassword } from './dto/verify-password.dto';
 import { IBody } from 'common/constants/setting';
 import { ApiTags } from '@nestjs/swagger';
+import { CreatePatientRegisterDto } from 'models/user/dto/create-patient_register.dto';
 @Controller('auth')
 @ApiTags("auth")
 export class AuthController {
@@ -59,6 +60,12 @@ export class AuthController {
   @Patch("/change-password")
   async changePassword(@ReqUser() user: User, @Body() body: IBody) {
     return this.authService.changePassword(user, body);
+  }
+
+  @UseGuards(JwtGuard)
+  @Post("/create-patient")
+  async createPatient(@ReqUser() user: User, @Body() body: CreatePatientRegisterDto) {
+    return this.authService.createPatient(user, body)
   }
 
 }

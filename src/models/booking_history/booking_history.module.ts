@@ -9,6 +9,7 @@ import Appointment from 'models/appointment/entities/appointment.entity';
     TypeOrmModule.forFeature([BookingHistory, Appointment])
   ],
   controllers: [BookingHistoryController],
-  providers: [BookingHistoryService]
+  providers: [BookingHistoryService],
+  exports: [BookingHistoryService]
 })
 export class BookingHistoryModule { }

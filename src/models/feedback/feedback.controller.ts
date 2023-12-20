@@ -13,4 +13,9 @@ export class FeedbackController {
   createFeedBack(@Body() body: CreateFeedbackDto) {
     return this.feedbackService.createFeedBack(body)
   }
+
+  // @Get("/get-feedback-doctor")
+  // getFeedBack(){
+
+  // }
 }

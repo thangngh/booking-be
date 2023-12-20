@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-empty-function */
 import { BadRequestException, Injectable, PipeTransform } from "@nestjs/common"
-import path from "path";
-import sharp from "sharp";
+import * as path from 'path';
+import * as sharp from 'sharp'
 import * as admin from 'firebase-admin';
 
 @Injectable()
@@ -15,7 +15,6 @@ export class SharpPipe implements PipeTransform<Express.Multer.File, Promise<str
 
     async transform(file: Express.Multer.File): Promise<any> {
         if (Array.isArray(file)) {
-
             const fileLocal: string[] = [];
 
             for (const fl of file) {
@@ -27,6 +26,7 @@ export class SharpPipe implements PipeTransform<Express.Multer.File, Promise<str
                     throw new BadRequestException('Invalid file type');
                 }
                 const originalName = path.parse(fl.originalname).name;
+                console.log("file", originalName)
                 // const ext = fl.mimetype.startsWith("image/") ? ".webp" : ".webm"
 
                 const ext = ".webp";

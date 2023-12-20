@@ -2,8 +2,9 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { User } from './entities/user.entity';
 import { Repository } from 'typeorm';
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
-import { LIMIT, LIMIT_QUERY, PAGE } from 'common/constants/setting';
+import { EGender, LIMIT, LIMIT_QUERY, PAGE } from 'common/constants/setting';
 import { PaginationOptionsInterfaceName } from 'common/pagination';
+import { UpdateUserDto } from './dto/update-user.dto';
 
 @Injectable()
 export class UserRepository {
@@ -22,6 +23,22 @@ export class UserRepository {
         );
 
         return query;
+    }
+
+    async profile(id: string) {
+        const query = await this.userRepository.createQueryBuilder("user")
+            .leftJoinAndSelect("user.doctorRegister", "doctorRegister")
+            .leftJoinAndSelect("user.doctorSpecialized", "doctorSpecialized")
+            .leftJoinAndSelect("doctorSpecialized.specialized", "specialized")
+            .leftJoinAndSelect("user.feedbackDoctor", "feedbackDoctor")
+            .leftJoinAndSelect("user.appointmentDoctor", "appointmentDoctor")
+            .leftJoinAndSelect("appointmentDoctor.patient", "patient")
+            .leftJoinAndSelect("user.appointmentPatient", "appointmentPatient")
+            .where("user.id = :id", { id: id })
+            .getOne()
+
+        return { ...query, gender: EGender[query.gender] }
+
     }
 
     async queryUsername(username: string) {
@@ -136,6 +153,8 @@ export class UserRepository {
             .leftJoinAndSelect('userRole.role', 'role')
             .leftJoinAndSelect('user.doctorRegister', 'doctorRegister')
             .leftJoinAndSelect('user.doctorSpecialized', 'doctorSpecialized')
+            .leftJoinAndSelect("user.feedbackDoctor", "feedbackDoctor")
+            .leftJoinAndSelect("user.feedbackPatient", "feedbackPatient")
             .leftJoinAndSelect('doctorSpecialized.specialized', 'specialized')
             .where('doctorRegister.id IS NOT NULL')
             .take(take)
@@ -165,5 +184,17 @@ export class UserRepository {
         `, [symptom, insurance, id])
 
         return query;
+    }
+
+    async update(id: number, body: UpdateUserDto) {
+        const query = await this.userRepository.createQueryBuilder("user")
+            .update()
+            .set({
+                ...body
+            })
+            .where("user.id = :id", { id })
+            .execute()
+
+        return await this.findOne(id.toString());
     }
 }

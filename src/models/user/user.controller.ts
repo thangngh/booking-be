@@ -16,7 +16,6 @@ import { ApiTags } from '@nestjs/swagger';
 export class UserController {
   constructor(private readonly userService: UserService) { }
 
-
   @Get("/all-doctor")
   getAllDoctor(@Query() query: PaginationDTO) {
     return this.userService.getAllDoctor(query)
@@ -33,6 +32,12 @@ export class UserController {
   @Get("/profile")
   getProfile(@ReqUser() user: User) {
     return this.userService.profile(user)
+  }
+
+  @UseGuards(JwtGuard)
+  @Patch("/edit/profile")
+  editProfile(@ReqUser() user: User, @Body() body: UpdateUserDto) {
+    return this.userService.editProfile(user, body)
   }
 
   @UseGuards(JwtGuard)
@@ -64,7 +69,21 @@ export class UserController {
         res.send(url);
       }
     });
+
+
   }
 
+  @Get('get-image-doctor/:imgpath')
+  async seenImageDoctor(@Param('imgpath') imgpath, @Res() res) {
+    const bucket = admin.storage().bucket();
 
+    const filePath = `uploads/${imgpath}`;
+
+    const file = bucket.file(filePath);
+    const readStream = file.createReadStream();
+    readStream.pipe(res);
+
+
+
+  }
 }

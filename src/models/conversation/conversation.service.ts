@@ -4,7 +4,7 @@ import { Conversation } from './entities/conversation.entity';
 import { Repository } from 'typeorm';
 import { User } from 'models/user/entities/user.entity';
 import { createConversationDto } from './dto/create-conversation.dto';
-import { generateString } from 'common/constants/setting';
+import { IBody, generateString } from 'common/constants/setting';
 
 @Injectable()
 export class ConversationService {
@@ -18,11 +18,27 @@ export class ConversationService {
         const created = body.map(({ userId }) =>
             this.conversationRepository.create({
                 name: generaleConversationName,
-                userId: userId
+                userId: userId,
+                isActive: true
             })
         )
 
         return await this.conversationRepository.save(created)
+    }
+
+    async findParticipantConversation(user: IBody[]) {
+        const result = [];
+        for await (const { userId } of user) {
+            const findData = await this.conversationRepository.findOne({
+                where: {
+                    userId: +userId,
+                    isActive: true
+                }
+            })
+            findData && result.push(findData)
+        }
+
+        return result;
     }
 
     async getAllConversation(user: User) {
@@ -46,10 +62,11 @@ export class ConversationService {
         return formattedResult;
     }
 
-    async getConversationByName(name: string, sender: number) {
+    async getConversationByName(name: string) {
         const query = await this.conversationRepository.createQueryBuilder("conversation")
             .where("conversation.name = :name", { name })
-            .andWhere("conversation.userId = :id", { id: sender })
+            // .andWhere("conversation.userId = :id", { id: sender })
+            .andWhere("conversation.isActive = :status", { status: true })
             .getOne()
 
         return query;

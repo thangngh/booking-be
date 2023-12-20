@@ -13,8 +13,7 @@ export class UserRoleService {
     @InjectRepository(UserRole) private readonly userRoleRepository: Repository<UserRole>
   ) { }
 
-  async createTransitionSaveRoleUser(user: User, roleId: string) {
-    console.log("user ", user, roleId)
+  async createTransitionSaveRoleUser(user: string, roleId: string) {
     const transition = await this.userRoleRepository.manager.connection.createQueryRunner();
 
 
@@ -23,7 +22,7 @@ export class UserRoleService {
 
     try {
       const userRole = new UserRole({
-        userId: user?.id,
+        userId: +user,
         roleId: +roleId
       })
       const query = await transition.manager.save(userRole)
@@ -59,7 +58,7 @@ export class UserRoleService {
     }))
 
     return {
-      ...result,
+      result,
       isDoctor,
       isPatient
     };

@@ -20,8 +20,8 @@ export class DoctorRegisterController {
   }
 
   @UseGuards(JwtGuard)
-  @Patch("/edit/:doctorId")
-  editDoctor(@Param('doctorId') doctorId: number, @ReqUser() user: User, @Body() body: CreateDoctorRegisterDto) {
-    return this.doctorRegisterService.editDoctor(doctorId, user, body)
+  @Patch("/edit")
+  editDoctor(@ReqUser() user: User, @Body() body: CreateDoctorRegisterDto) {
+    return this.doctorRegisterService.editDoctor(user, body)
   }
 }

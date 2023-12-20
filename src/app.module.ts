@@ -19,6 +19,7 @@ import { PatientRegisterModule } from './models/patient_register/patient_registe
 import { AppointmentModule } from './models/appointment/appointment.module';
 import { BookingHistoryModule } from './models/booking_history/booking_history.module';
 import { FeedbackModule } from './models/feedback/feedback.module';
+import { SocketModule } from 'socket/socket.module';
 @Module({
   imports: [
     ConfigModule.forRoot({
@@ -41,6 +42,7 @@ import { FeedbackModule } from './models/feedback/feedback.module';
     AppointmentModule,
     BookingHistoryModule,
     FeedbackModule,
+    SocketModule
   ],
   controllers: [AppController],
   providers: [AppService],

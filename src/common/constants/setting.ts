@@ -22,8 +22,8 @@ export enum EProviderType {
 }
 
 export enum EGender {
-    FEMALE = 'FEMALE',
-    MALE = 'MALE'
+    FEMALE = 0,
+    MALE = 1
 }
 
 export interface IAddress {

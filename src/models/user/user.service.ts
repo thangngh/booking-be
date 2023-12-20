@@ -1,12 +1,13 @@
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { User } from './entities/user.entity';
-import { IBody, hashValue } from 'common/constants/setting';
+import { EGender, IBody, hashValue } from 'common/constants/setting';
 import { IJwtPayload } from 'authentication/auth/interface/auth.interface';
 import { UserRepository } from './user.repository';
 import { IUpdateRT } from './user.interface';
 import { PaginationDTO } from 'common/pagination/dto/paginationQuery-dto';
 import { Pagination } from 'common/pagination';
 import { CreatePatientRegisterDto } from './dto/create-patient_register.dto';
+import { UpdateUserDto } from './dto/update-user.dto';
 
 @Injectable()
 export class UserService {
@@ -45,8 +46,7 @@ export class UserService {
 
   async profile(user: User) {
     const { id } = user;
-    const query = await this.userRepository.findOne(id.toString())
-
+    const query = await this.userRepository.profile(id.toString())
     return query
   }
 
@@ -124,6 +124,15 @@ export class UserService {
     const query = await this.userRepository.createPatient(user.id, body.symptom, body.insurance)
 
     return query && await this.findUserById(user.id.toString())
+  }
+
+  async editProfile(user: User, body: UpdateUserDto) {
+    const { id } = user;
+
+    const query = await this.userRepository.update(id, { ...body, gender: EGender[body.gender] as unknown as EGender });
+
+
+    return query
   }
 
 }

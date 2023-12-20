@@ -8,5 +8,4 @@ export class createAppointmentDTO {
 
     clientId: string
 
-    status: string;
 }

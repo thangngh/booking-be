@@ -18,7 +18,6 @@ export class SpecializedService {
             ...spec,
             description: 'World-class care for everyone. Our health System offers unmatched, expert health care. From the lab to the clinic.'
         }))
-        console.log("result", result)
         return result
     }
 }

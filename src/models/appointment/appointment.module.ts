@@ -11,6 +11,8 @@ import BookingHistory from 'models/booking_history/entities/booking_history.enti
     TypeOrmModule.forFeature([Appointment, User, BookingHistory])
   ],
   controllers: [AppointmentController],
-  providers: [AppointmentService]
+  providers: [AppointmentService],
+  exports: [AppointmentService
+  ]
 })
 export class AppointmentModule { }

@@ -20,12 +20,12 @@ export class MessageService {
     async createMessage(sender: User, data: CreateMessageDto) {
         const { body, conversation } = data;
 
-        const getConversation = await this.conversationService.getConversationByName(conversation.name, sender.id)
+        const getConversation = await this.conversationService.getConversationByName(conversation.name)
 
         const messageEntity = await this.messageRepository.create({
             body,
             conversation: getConversation,
-            sender
+            sender: sender[0]
         });
 
         await this.messageRepository.save(messageEntity);

@@ -256,7 +256,7 @@ export class AuthService {
     async createPatient(user: User, body: CreatePatientRegisterDto) {
         const query = await this.userService.createPatient(user, body)
         const getRoleName = await this.roleService.getRoleByName(RoleType['PATIENT'])
-        const updateRole = await this.userRoleService.createTransitionSaveRoleUser(user, getRoleName.id.toString())
+        const updateRole = await this.userRoleService.createTransitionSaveRoleUser(user.id.toString(), getRoleName.id.toString())
 
         return { ...query, updateRole }
     }

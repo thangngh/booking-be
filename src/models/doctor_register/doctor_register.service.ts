@@ -29,7 +29,7 @@ export class DoctorRegisterService {
                 phone: body.phone, certification: body.certification, email: body.email, timeBegin: body.timeBegin, timeEnd: body.timeEnd, userId: id
             })
             const save = await transition.manager.save(created)
-            const saveRole = await this.userRoleService.createTransitionSaveRoleUser(user, (roleDoctor?.id)?.toString())
+            const saveRole = await this.userRoleService.createTransitionSaveRoleUser(id.toString(), (roleDoctor?.id)?.toString())
             await transition.commitTransaction()
 
             return { ...save, ...saveRole };
@@ -44,14 +44,16 @@ export class DoctorRegisterService {
 
     }
 
-    async editDoctor(doctorId: number, user: User, body: UpdateDoctorRegisterDto) {
+    async editDoctor(user: User, body: UpdateDoctorRegisterDto) {
+
+        const { id } = user
 
         const updateDoctor = await this.doctorRepository.createQueryBuilder()
             .update(DoctorRegister)
             .set({
                 ...body
             })
-            .where("id = :id", { id: doctorId })
+            .where("id = :id", { id })
             .execute()
 
     }

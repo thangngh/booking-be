@@ -16,6 +16,9 @@ export class Conversation extends BaseEntity {
     @Column()
     name: string;
 
+    @Column({ type: "boolean" })
+    isActive: boolean;
+
     @Column({ name: 'user_id' })
     userId: number;
 
