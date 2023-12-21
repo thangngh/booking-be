@@ -33,6 +33,7 @@ import { UserRoleModule } from 'models/user-role/user-role.module';
     // })
   ],
   controllers: [AuthController],
-  providers: [AuthService, LocalStrategy, JwtStrategy, RefreshTokenStrategy]
+  providers: [AuthService, LocalStrategy, JwtStrategy, RefreshTokenStrategy],
+  exports: [AuthService]
 })
 export class AuthModule { }

@@ -26,9 +26,17 @@ export class AppointmentController {
 
   @UseGuards(JwtGuard)
   @Get("/get-by-doctor")
-  getAppointmentByPatient(@ReqUser() user: User) {
+  getAppointmentByDoctor(@ReqUser() user: User) {
     return this.appointmentService.getAppointmentByDoctor(user)
   }
+
+
+  @UseGuards(JwtGuard)
+  @Get("/get-by-patient")
+  getAppointmentByPatient(@ReqUser() user: User) {
+    return this.appointmentService.getAppointmentByPatient(user)
+  }
+
 
   @UseGuards(JwtGuard)
   @Get("/get-one/:id")

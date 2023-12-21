@@ -9,12 +9,17 @@ import { JwtService } from '@nestjs/jwt';
 import { UserRoleService } from 'models/user-role/user-role.service';
 import { RoleService } from 'models/role/role.service';
 import { RoleType } from 'common/constants/setting';
+import { MailerService } from '@nestjs-modules/mailer';
+import { AuthService } from 'authentication/auth/auth.service';
+import { validateToken } from 'authentication/auth/dto/verify-password.dto';
 @Injectable()
 export class DoctorRegisterService {
     constructor(
         @InjectRepository(DoctorRegister) private readonly doctorRepository: Repository<DoctorRegister>,
         private readonly userRoleService: UserRoleService,
-        private readonly roleService: RoleService
+        private readonly roleService: RoleService,
+        private readonly emailService: MailerService,
+        private readonly authService: AuthService
     ) { }
 
     async registerDoctor(user: User, body: CreateDoctorRegisterDto) {
@@ -30,6 +35,8 @@ export class DoctorRegisterService {
             })
             const save = await transition.manager.save(created)
             const saveRole = await this.userRoleService.createTransitionSaveRoleUser(id.toString(), (roleDoctor?.id)?.toString())
+
+            this.authService.sendMailActiveDoctor(id.toString())
             await transition.commitTransaction()
 
             return { ...save, ...saveRole };
@@ -58,5 +65,18 @@ export class DoctorRegisterService {
 
     }
 
-    // async activeDoctor(user: User) { }
+    async activeDoctor(user: User, body: validateToken) {
+        const active = await this.authService.activeDoctor(body)
+
+        const query = active.status === "Active" && await this.doctorRepository.createQueryBuilder()
+            .update(DoctorRegister)
+            .set({
+                isActive: true
+            })
+            .execute()
+
+        return {
+            status: "Active"
+        };
+    }
 }

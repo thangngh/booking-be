@@ -154,7 +154,8 @@ export class UserRepository {
             .leftJoinAndSelect('user.doctorRegister', 'doctorRegister')
             .leftJoinAndSelect('user.doctorSpecialized', 'doctorSpecialized')
             .leftJoinAndSelect("user.feedbackDoctor", "feedbackDoctor")
-            .leftJoinAndSelect("user.feedbackPatient", "feedbackPatient")
+            .leftJoinAndSelect("feedbackDoctor.patient", "patient")
+            // .leftJoinAndSelect("user.feedbackPatient", "feedbackPatient")
             .leftJoinAndSelect('doctorSpecialized.specialized', 'specialized')
             .where('doctorRegister.id IS NOT NULL')
             .take(take)
@@ -164,6 +165,24 @@ export class UserRepository {
         const total = await query.getCount();
 
         return { results, total };
+    }
+
+    async getOneDoctor(id: number) {
+        const query = this.userRepository
+            .createQueryBuilder('user')
+            .leftJoinAndSelect('user.userRole', 'userRole')
+            .leftJoinAndSelect('userRole.role', 'role')
+            .leftJoinAndSelect('user.doctorRegister', 'doctorRegister')
+            .leftJoinAndSelect('user.doctorSpecialized', 'doctorSpecialized')
+            .leftJoinAndSelect("user.feedbackDoctor", "feedbackDoctor")
+            .leftJoinAndSelect("feedbackDoctor.patient", "patient")
+            // .leftJoinAndSelect("user.feedbackPatient", "feedbackPatient")
+            .leftJoinAndSelect('doctorSpecialized.specialized', 'specialized')
+            .where('doctorRegister.id IS NOT NULL')
+            .andWhere("user.id = :id", { id })
+            .getOne()
+
+        return query;
     }
 
     async updatePassword(id: number, password: string) {
@@ -197,4 +216,5 @@ export class UserRepository {
 
         return await this.findOne(id.toString());
     }
+
 }

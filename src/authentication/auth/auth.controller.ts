@@ -51,6 +51,11 @@ export class AuthController {
     return this.authService.sendEmailResetPassword(sendMail);
   }
 
+  @Post("/send-mail-active/:id")
+  async sendMailActiveDoctor(@Param("id") id: string) {
+    return this.authService.sendMailActiveDoctor(id);
+  }
+
   @Patch("/change-password-verify-token")
   async changePasswordWithToken(@Body() body: validateTokenPassword) {
     return this.authService.changePasswordWithVerifyToken(body);

@@ -25,7 +25,7 @@ export class EmailConfigService implements MailerOptionsFactory {
                 from: `"booking doctor"`,
             },
             template: {
-                dir: join(__dirname, 'templates'),
+                dir: 'dist/templates',
                 adapter: new HandlebarsAdapter(),
                 options: {
                     strict: true,

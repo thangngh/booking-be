@@ -15,3 +15,10 @@ export class validateTokenPassword extends validatePassword {
     @IsJWT({ message: "Wrong format token" })
     token: string
 }
+
+export class validateToken {
+    @ApiProperty()
+    @IsNotEmpty()
+    @IsJWT({ message: "Wrong format token" })
+    token: string
+}

@@ -6,5 +6,5 @@ export class CreateFeedbackDto {
 
     public doctorId: number;
 
-    public patientId: number;
+    // public patientId: number;
 }

@@ -21,6 +21,11 @@ export class UserController {
     return this.userService.getAllDoctor(query)
   }
 
+  @Get("/doctor/:id")
+  getDoctor(@Param("id") id: number) {
+    return this.userService.getOneDoctor(id)
+  }
+
 
   @UseGuards(JwtGuard)
   @Get("/user-role")

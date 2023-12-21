@@ -83,6 +83,13 @@ export class UserService {
     });
   }
 
+  async getOneDoctor(id: number) {
+    const query = await this.userRepository.getOneDoctor(id)
+
+
+    return query;
+  }
+
   async getUserRole(user: User) {
     const { id } = user;
 

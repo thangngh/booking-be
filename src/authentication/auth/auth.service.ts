@@ -11,7 +11,7 @@ import { UserRoleService } from 'models/user-role/user-role.service';
 import { RoleService } from 'models/role/role.service';
 import { SendMail } from './dto/send-mail.dto';
 import { MailerService } from '@nestjs-modules/mailer';
-import { validateTokenPassword } from './dto/verify-password.dto';
+import { validateToken, validateTokenPassword } from './dto/verify-password.dto';
 import { CreatePatientRegisterDto } from 'models/user/dto/create-patient_register.dto';
 
 @Injectable()
@@ -194,6 +194,64 @@ export class AuthService {
 
     }
 
+    async sendMailActiveDoctor(id: string) {
+
+        const findUser = await this.userService.findOne(id)
+
+        const email = findUser[0].email
+        const generateToken = await this.jwtService.sign(
+            { email },
+            { expiresIn: '15m' }
+        )
+
+        const URL = `active-doctor?token=${generateToken}`;
+
+        findUser && this.mailService.sendMail({
+            from: this.configService.get('MAIL_USER'),
+            to: email,
+            subject: 'active doctor',
+            template: 'active-doctor',
+            context: {
+                email: email,
+                token: this.configService.get('FE_HOST') + URL,
+                contact: this.configService.get('MAIL_USER'),
+            },
+        });
+
+        return {
+            status: HttpStatus.OK,
+        };
+    }
+
+    async activeDoctor(body: validateToken) {
+        const { token } = body
+
+        try {
+            const decoded: any = this.jwtService.verify(token);
+
+            const user = await this.userService.queryEmail({ email: decoded.email })
+
+            if (!user) {
+                throw new HttpException('Some thing went wrong!, User not exist', HttpStatus.BAD_REQUEST);
+            }
+
+            if (user.isActive) {
+                throw new BadRequestException()
+            }
+
+            return {
+                status: "Active",
+                user
+            }
+
+        } catch (error) {
+            if (error.name === 'TokenExpiredError') {
+                throw new HttpException('Token has expired', HttpStatus.BAD_REQUEST);
+            }
+        }
+    }
+
+
     async changePasswordWithVerifyToken(body: validateTokenPassword) {
         const { token, password } = body;
 
@@ -226,6 +284,7 @@ export class AuthService {
 
 
     }
+
 
     async changePassword(user: User, body: IBody) {
         const { oldPassword, newPassword } = body;

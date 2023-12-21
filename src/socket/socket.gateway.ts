@@ -33,10 +33,10 @@ export class SocketGateway implements OnGatewayConnection, OnGatewayDisconnect {
         this.logger.verbose("Client Disconnected ...!")
     }
 
-    @SubscribeMessage("notify_booking")
+    @SubscribeMessage("approved_booking")
     async notifyBooking(client: Socket, payload: any) {
 
-        const { doctor_Id, appointmentId, patient_id, patient_client_id, } = payload
+        const { doctor_Id, appointmentId, patient_id } = payload
 
         const body = [doctor_Id, patient_id].map((value) => ({ userId: value }))
 
